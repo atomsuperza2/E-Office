@@ -2,6 +2,7 @@ package com.example.dell.testlogin;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,9 +36,11 @@ public class HomeActivity extends AppCompatActivity {
 
         button1 = (Button)findViewById(R.id.button1);
         button2 = (Button)findViewById(R.id.button2);
-        button1.setEnabled(true);
-        button2.setEnabled(true);
-        checkCondition();
+//        button1.setEnabled(true);
+//        button2.setEnabled(true);
+        checkConditionOnTime();
+        checkConditionOnClickIn();
+
 
         format = new SimpleDateFormat("dd:MM:yy:HH:mm:ss");
         calendar = Calendar.getInstance();
@@ -46,20 +49,24 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                session.setClick(true);
+                session.setClickIn(true);
                 session.setTestsaveTime(format.format(calendar.getTime()));
                 button1.setEnabled(false);
+
 
             }
         });
 
+        checkConditionOnClickOut();
         button2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
-                session.setClick(false);
-                Intent newActivity = new Intent(HomeActivity.this, DetailActivity.class);
-                startActivity(newActivity);
+                session.setClickOut(true);
+//                Intent newActivity = new Intent(HomeActivity.this, DetailActivity.class);
+//                startActivity(newActivity);
+                button2. setEnabled(false);
+
             }
         });
 //            if(button1.isEnabled()){
@@ -99,23 +106,52 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void checkCondition(){
-        if (isClickedToDay()&&isCheckTime()){
+    public void checkConditionOnClickIn(){
+        if (isClickedIn()){
             button1.setEnabled(false);
         }else{
             button1.setEnabled(true);
         }
     }
-    public boolean isClickedToDay()
+    public void checkConditionOnClickOut(){
+        if (isClickedOut()){
+            button2.setEnabled(false);
+        }else{
+            button2.setEnabled(true);
+        }
+    }
+
+    public boolean isClickedIn()
     {
-        if(session.getclick()) {
+        if(session.getclickIn()) {
             return true;
         }else {
             return  false;
         }
     }
+    public boolean isClickedOut()
+    {
+        if(session.getclickOut()) {
+            return true;
+        }else {
+            return  false;
+        }
+    }
+    public void checkConditionOnTime(){
+        final AlertDialog.Builder ad = new AlertDialog.Builder(this);
+        if(isCheckTime()){
+            session.setClickOut(false);
+            session.setClickIn(false);
+        }else{
+            String word;
+            word = "To day is clicked";
+            ad.setTitle("status");
+            ad.setMessage(word);
+            ad.show();
+        }
+    }
     public boolean isCheckTime(){
-        if(session.getTestsaveTime().equals(defultDate())){
+        if(session.getTestsaveTime().compareTo(defultDate())<0){
             return true;
         }
         else{

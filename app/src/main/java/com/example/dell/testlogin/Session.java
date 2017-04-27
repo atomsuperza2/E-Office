@@ -61,13 +61,23 @@ public class Session {
         return preferences.getString("testdate","dd:MM:yy:HH:mm:ss");
     }
 
-    public void setClick(boolean click){
-        editor.putBoolean("clickInmode", click);
+    public void setClickIn(boolean clickIn){
+        editor.putBoolean("clickInmode", clickIn);
         editor.commit();
     }
 
-    public boolean getclick(){
+    public boolean getclickIn(){
         return preferences.getBoolean("clickInmode", false);
+    }
+
+
+    public void setClickOut(boolean clickOut){
+        editor.putBoolean("clickOutmode", clickOut);
+        editor.commit();
+    }
+
+    public boolean getclickOut(){
+        return preferences.getBoolean("clickOutmode", false);
     }
 
 
